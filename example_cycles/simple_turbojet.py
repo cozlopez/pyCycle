@@ -143,6 +143,8 @@ def viewer(prob, pt, file=sys.stdout):
     shaft_full_names = [f'{pt}.{s}' for s in shaft_names]
     pyc.print_shaft(prob, shaft_full_names, file=file)
 
+    pyc.print_balances(prob, pt, file=file)
+
 def map_plots(prob, pt):
     comp_names = ['comp']
     comp_full_names = [f'{pt}.{c}' for c in comp_names]
