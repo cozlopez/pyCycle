@@ -96,25 +96,22 @@ jobs:
         id: setup_pixi_environment
         uses: OpenMDAO/OpenMDAO/.github/actions/setup_openmdao_pixi@master
         with:
-          environment: '${{ inputs.OPENMDAO_PIXI_ENVIRONMENT }}'
-          openmdao_install_from: '${{ inputs.OPENMDAO_INSTALL_FROM }}'
-          openmdao_version: '${{ inputs.OPENMDAO }}'
+          environment: '${{ matrix.OPENMDAO_PIXI_ENVIRONMENT }}'
+          openmdao_install_from: '${{ matrix.OPENMDAO_INSTALL_FROM }}'
+          openmdao_version: '${{ matrix.OPENMDAO }}'
 
       - name: Install pyCycle
         run: |
+          eval "$(pixi shell-hook -e ${{ matrix.OPENMDAO_PIXI_ENVIRONMENT }} --manifest-path=${{ env.PIXI_MANIFEST }})"
           echo "============================================================="
           echo "Install pyCycle"
           echo "============================================================="
           python -m pip install -e .[all]
 
-      - name: Display environment info
-        run: |
-          conda info
-          conda list
-
       - name: Run tests
         id: run_tests
         run: |
+          eval "$(pixi shell-hook -e ${{ matrix.OPENMDAO_PIXI_ENVIRONMENT }} --manifest-path=${{ env.PIXI_MANIFEST }})"
           echo "============================================================="
           echo "Run tests (from directory other than repo root)"
           echo "============================================================="
@@ -127,6 +124,7 @@ jobs:
         id: deprecations_report
         continue-on-error: true
         run: |
+          eval "$(pixi shell-hook -e ${{ matrix.OPENMDAO_PIXI_ENVIRONMENT }} --manifest-path=${{ env.PIXI_MANIFEST }})"
           echo "============================================================="
           echo "Display deprecations report"
           echo "============================================================="
@@ -140,6 +138,7 @@ jobs:
 
       - name: Check NumPy 2.0 Compatibility
         run: |
+          eval "$(pixi shell-hook -e ${{ matrix.OPENMDAO_PIXI_ENVIRONMENT }} --manifest-path=${{ env.PIXI_MANIFEST }})"
           echo "============================================================="
           echo "Check code for NumPy 2.0 compatibility"
           echo "See: https://numpy.org/devdocs/numpy_2_0_migration_guide.html"
